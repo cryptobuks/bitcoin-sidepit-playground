@@ -843,6 +843,7 @@ static void SetGenerateToAddressArgs(const std::string& address, std::vector<std
 
 static int CommandLineRPC(int argc, char *argv[])
 {
+    std::cout << "dex <<043021>> { " << std::endl << std::endl; 
     std::string strPrint;
     int nRet = 0;
     try {
@@ -951,6 +952,10 @@ static int CommandLineRPC(int argc, char *argv[])
     if (strPrint != "") {
         tfm::format(nRet == 0 ? std::cout : std::cerr, "%s\n", strPrint);
     }
+
+
+    std::cout << std::endl << "} //dex <<043021>> " << std::endl ; 
+
     return nRet;
 }
 

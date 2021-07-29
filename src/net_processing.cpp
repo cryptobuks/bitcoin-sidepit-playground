@@ -2529,10 +2529,10 @@ void PeerManagerImpl::ProcessMessage(CNode& pfrom, const std::string& msg_type, 
         if (pfrom.fSuccessfullyConnected) {
             LogPrint(BCLog::NET, "ignoring redundant verack message from peer=%d\n", pfrom.GetId());
             return;
-        }
+        }   
 
         if (!pfrom.IsInboundConn()) {
-            LogPrintf("New outbound peer connected: version: %d, blocks=%d, peer=%d%s (%s)\n",
+            LogPrintf("Sidepit xx: New outbound peer connected: version: %d, blocks=%d, peer=%d%s (%s)\n",
                       pfrom.nVersion.load(), peer->m_starting_height,
                       pfrom.GetId(), (fLogIPs ? strprintf(", peeraddr=%s", pfrom.addr.ToString()) : ""),
                       pfrom.ConnectionTypeAsString());

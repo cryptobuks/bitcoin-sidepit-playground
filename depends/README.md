@@ -28,7 +28,7 @@ Common `host-platform-triplet`s for cross compilation are:
 - `i686-pc-linux-gnu` for Linux 32 bit
 - `x86_64-pc-linux-gnu` for x86 Linux
 - `x86_64-w64-mingw32` for Win64
-- `x86_64-apple-darwin18` for macOS
+- `x86_64-apple-darwin19` for macOS
 - `arm-linux-gnueabihf` for Linux ARM 32 bit
 - `aarch64-linux-gnu` for Linux ARM 64 bit
 - `powerpc64-linux-gnu` for Linux POWER 64-bit (big endian)
@@ -48,6 +48,11 @@ The paths are automatically configured and no other options are needed unless ta
 #### For macOS cross compilation
 
     sudo apt-get install curl librsvg2-bin libtiff-tools bsdmainutils cmake imagemagick libz-dev python3-setuptools libtinfo5 xorriso
+
+Note: You must obtain the macOS SDK before proceeding with a cross-compile.
+Under the depends directory, create a subdirectory named `SDKs`.
+Then, place the extracted SDK under this new directory.
+For more information, see [SDK Extraction](../contrib/macdeploy/README.md#sdk-extraction).
 
 #### For Win64 cross compilation
 
@@ -81,6 +86,14 @@ this is apparently fixed in gcc-8.1.0.
 For linux S390X cross compilation:
 
     sudo apt-get install g++-s390x-linux-gnu binutils-s390x-linux-gnu
+
+### Install the required dependencies: M1-based macOS
+
+To be able to build the `qt` package, ensure that Rosetta 2 is installed:
+
+```
+softwareupdate --install-rosetta
+```
 
 ### Dependency Options
 

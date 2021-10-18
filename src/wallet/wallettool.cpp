@@ -54,8 +54,7 @@ static std::shared_ptr<CWallet> MakeWallet(const std::string& name, const fs::pa
     std::shared_ptr<CWallet> wallet_instance{new CWallet(nullptr /* chain */, name, std::move(database)), WalletToolReleaseWallet};
     DBErrors load_wallet_ret;
     try {
-        bool first_run;
-        load_wallet_ret = wallet_instance->LoadWallet(first_run);
+        load_wallet_ret = wallet_instance->LoadWallet();
     } catch (const std::runtime_error&) {
         tfm::format(std::cerr, "Error loading %s. Is wallet being used by another process?\n", name);
         return nullptr;
@@ -77,6 +76,10 @@ static std::shared_ptr<CWallet> MakeWallet(const std::string& name, const fs::pa
         } else if (load_wallet_ret == DBErrors::NEED_REWRITE) {
             tfm::format(std::cerr, "Wallet needed to be rewritten: restart %s to complete", PACKAGE_NAME);
             return nullptr;
+        } else if (load_wallet_ret == DBErrors::NEED_RESCAN) {
+            tfm::format(std::cerr, "Error reading %s! Some transaction data might be missing or"
+                           " incorrect. Wallet requires a rescan.",
+                name);
         } else {
             tfm::format(std::cerr, "Error loading %s", name);
             return nullptr;
@@ -122,7 +125,7 @@ bool ExecuteWalletToolFunc(const ArgsManager& args, const std::string& command)
         return false;
     }
     const std::string name = args.GetArg("-wallet", "");
-    const fs::path path = fsbridge::AbsPathJoin(GetWalletDir(), name);
+    const fs::path path = fsbridge::AbsPathJoin(GetWalletDir(), fs::PathFromString(name));
 
     if (command == "create") {
         DatabaseOptions options;

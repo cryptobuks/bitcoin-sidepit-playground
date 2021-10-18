@@ -5,8 +5,7 @@
 #ifndef BITCOIN_RPC_BLOCKCHAIN_H
 #define BITCOIN_RPC_BLOCKCHAIN_H
 
-#include <amount.h>
-#include <core_io.h>
+#include <consensus/amount.h>
 #include <streams.h>
 #include <sync.h>
 
@@ -53,13 +52,13 @@ UniValue blockheaderToJSON(const CBlockIndex* tip, const CBlockIndex* blockindex
 /** Used by getblockstats to get feerates at different percentiles by weight  */
 void CalculatePercentilesByWeight(CAmount result[NUM_GETBLOCKSTATS_PERCENTILES], std::vector<std::pair<CAmount, int64_t>>& scores, int64_t total_weight);
 
-void ScriptPubKeyToUniv(const CScript& scriptPubKey, UniValue& out, bool fIncludeHex);
-void TxToUniv(const CTransaction& tx, const uint256& hashBlock, UniValue& entry, bool include_hex = true, int serialize_flags = 0, const CTxUndo* txundo = nullptr);
-
-NodeContext& EnsureNodeContext(const std::any& context);
-CTxMemPool& EnsureMemPool(const std::any& context);
-ChainstateManager& EnsureChainman(const std::any& context);
-CBlockPolicyEstimator& EnsureFeeEstimator(const std::any& context);
+NodeContext& EnsureAnyNodeContext(const std::any& context);
+CTxMemPool& EnsureMemPool(const NodeContext& node);
+CTxMemPool& EnsureAnyMemPool(const std::any& context);
+ChainstateManager& EnsureChainman(const NodeContext& node);
+ChainstateManager& EnsureAnyChainman(const std::any& context);
+CBlockPolicyEstimator& EnsureFeeEstimator(const NodeContext& node);
+CBlockPolicyEstimator& EnsureAnyFeeEstimator(const std::any& context);
 
 /**
  * Helper to create UTXO snapshots given a chainstate and a file handle.

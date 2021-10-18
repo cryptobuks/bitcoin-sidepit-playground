@@ -2,6 +2,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include <consensus/amount.h>
 #include <pubkey.h>
 #include <script/interpreter.h>
 #include <streams.h>
@@ -41,6 +42,10 @@ FUZZ_TARGET_INIT(script_flags, initialize_script_flags)
         for (unsigned i = 0; i < tx.vin.size(); ++i) {
             CTxOut prevout;
             ds >> prevout;
+            if (!MoneyRange(prevout.nValue)) {
+                // prevouts should be consensus-valid
+                prevout.nValue = 1;
+            }
             spent_outputs.push_back(prevout);
         }
         PrecomputedTransactionData txdata;
